@@ -1,6 +1,8 @@
 <template>
   <div id="nav">
-    
+    <h1 class="nav-bar">トリビア</h1>
+    <button class="btn">新規登録</button>
+    <button class="btn">ログイン</button>
   </div>
   <router-view/>
 </template>
@@ -13,17 +15,13 @@
   text-align: center;
   color: #2c3e50;
 }
-
-#nav {
-  padding: 30px;
+#app #nav {
+  background-color: black;
+  color: white;
+  text-align: left;
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+#nav .btn{
+  background-color:black;
+  color: white;
 }
 </style>
