@@ -1,12 +1,22 @@
 <template>
   <div id="nav">
     <h1 class="nav-bar">トリビア</h1>
-    <button class="btn">新規登録</button>
+    <button @click="registerUser()" class="btn">新規登録</button>
     <button class="btn">ログイン</button>
   </div>
   <router-view/>
 </template>
-
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  setup(){
+    function registerUser(){
+      return
+    }
+    return {registerUser}
+  }
+})
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
