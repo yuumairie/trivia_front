@@ -1,18 +1,41 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <div class="cards" v-for="trivia in state.triviaList" :key="trivia">
+      <Trivia-Card :trivia="trivia" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { defineComponent, onMounted, reactive } from "vue";
+import axios from "axios";
+import TriviaCard from "../components/TriviaCard.vue";
 
-@Options({
+export default defineComponent({
+  name: "home",
   components: {
-    HelloWorld,
+    TriviaCard,
   },
-})
-export default class Home extends Vue {}
+  setup() {
+    const state = reactive({
+      triviaList: Array 
+    });
+    onMounted(() => {
+      axios
+        .get("/trivias/", {
+          headers: {
+            Authorization: "Token 90c33740259990faed5fa260d55d333c1be9f57b",
+          },
+        })
+        .then((req) => {
+          state.triviaList = req.data;
+        });
+    });
+
+    return { state };
+  },
+});
 </script>
+<style scoped>
+
+</style>
