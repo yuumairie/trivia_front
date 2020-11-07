@@ -22,7 +22,7 @@ export default defineComponent({
     });
     onMounted(() => {
       axios
-        .get("/trivias/", {
+        .get("api/trivias/", {
           headers: {
             Authorization: "Token 90c33740259990faed5fa260d55d333c1be9f57b",
           },
