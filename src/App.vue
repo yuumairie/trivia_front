@@ -1,8 +1,8 @@
 <template>
   <div id="nav">
     <h1 class="nav-bar">トリビア</h1>
-    <button @click="registerUser()" class="btn">新規登録</button>
-    <button class="btn">ログイン</button>
+    <router-link to='/register'> 新規登録</router-link>
+    <router-link to='/login'> ログイン</router-link>
   </div>
   <router-view/>
 </template>
