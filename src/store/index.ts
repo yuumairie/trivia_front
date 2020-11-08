@@ -1,5 +1,5 @@
 import { createStore, MutationTree, ActionContext, ActionTree, GetterTree, Store as VuexStore, CommitOptions, DispatchOptions, createLogger } from 'vuex'
-// import axios from 'axios'
+import axios from 'axios'
 
 export type State = {
   name: string;
@@ -39,13 +39,18 @@ type AugmentedActionContext = {
 export interface Actions {
   [ActionTypes.LOGIN](
     { commit }: AugmentedActionContext,
-    payload: string
+    payload: {
+      email: string;
+      password: string;
+    }
   ): void;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
-  [ActionTypes.LOGIN]({ commit }, payload: string) {
-    commit(MutationTypes.LOGIN, payload)
+  [ActionTypes.LOGIN]({ commit },data) {
+    axios.post("authen/jwt/create", data).then((res) => {
+      commit(MutationTypes.LOGIN,res.data.access)
+    });
   }
 }
 export type Getters = {
