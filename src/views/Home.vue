@@ -7,9 +7,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from "vue";
+import { defineComponent, onMounted, reactive, computed } from "vue";
 import axios from "axios";
 import TriviaCard from "../components/TriviaCard.vue";
+import { useStore, ActionTypes, store } from "../store";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "home",
@@ -17,25 +19,31 @@ export default defineComponent({
     TriviaCard,
   },
   setup() {
+    const store = useStore();
     const state = reactive({
-      triviaList: Array 
+      triviaList: Array,
     });
-    onMounted(() => {
-      axios
-        .get("api/trivias/", {
-          headers: {
-            Authorization: "Token 90c33740259990faed5fa260d55d333c1be9f57b",
-          },
-        })
-        .then((req) => {
-          state.triviaList = req.data;
-        });
+    const jwt = computed(() => {
+      return store.getters.getToken();
     });
 
-    return { state };
+    onMounted(() => {
+      //   axios
+      //     .get("api/trivias/", {
+      //       headers: {
+      //         Authorization: `JWT ${jwt}`,
+      //       },
+      //     })
+      //     .then((req) => {
+      //       state.triviaList = req.data;
+      //     });
+      axios.get("api/trivias/").then((req) => {
+        state.triviaList = req.data;
+      });
+    });
+
+    return { state, jwt };
   },
 });
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

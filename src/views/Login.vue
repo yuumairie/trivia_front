@@ -1,9 +1,5 @@
 <template>
   <div class="register-page">
-    <div class="name">
-      <label for="name">ユーザ名</label>
-      <input type="text" id="name" v-model="state.name" />
-    </div>
     <div class="email">
       <label for="address">アドレス</label>
       <input type="email" id="address" v-model="state.email" />
@@ -13,7 +9,7 @@
       <input type="password" id="password" v-model="state.password" />
     </div>
     <div>
-      <button @click="create()">アカウント作成</button>
+      <button @click="login()">ログイン</button>
     </div>
   </div>
 </template>
@@ -22,7 +18,7 @@
 import { defineComponent, reactive } from "vue";
 import { useStore, ActionTypes } from "../store";
 import { useRouter } from "../router";
-import axios from "axios";
+
 export default defineComponent({
   setup() {
     const state = reactive({
@@ -31,24 +27,22 @@ export default defineComponent({
       password: "",
     });
 
-    //アカウント作成関数
-    function create() {
+    //ログイン
+    function login() {
       const store = useStore();
       const router = useRouter();
       const data = {
         email: state.email,
         password: state.password,
       };
-      //アカウント作成
-      axios.post("/api/register/", data).then(() => {
-        //jwt取得
-        store.dispatch(ActionTypes.LOGIN, data).then(() => {
-          //ホーム画面へ移動
-          router.push("home");
-        });
+
+      //jwt取得
+      store.dispatch(ActionTypes.LOGIN, data).then(() => {
+        //ホーム画面へ移動
+        router.push("home");
       });
     }
-    return { state, create };
+    return { state, login };
   },
 });
 </script>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import RegisterUser from '../views/RegisterUser.vue'
+import Login from '../views/Login.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -11,12 +12,21 @@ const routes: Array<RouteRecordRaw> = [
     path:'/register',
     name: 'Register',
     component: RegisterUser
+  },
+  {
+    path:'/login',
+    name: 'Login',
+    component: Login  
   }
 ]
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+export function useRouter() {
+  return router;
+}
 
-export default router
+
+// export default router
