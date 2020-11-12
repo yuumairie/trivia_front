@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <div class="post" v-if="jwt">
+      <router-link to='/post'>投稿</router-link>
+    </div>
     <div class="cards" v-for="trivia in state.triviaList" :key="trivia">
       <Trivia-Card :trivia="trivia" />
     </div>
@@ -10,8 +13,8 @@
 import { defineComponent, onMounted, reactive, computed } from "vue";
 import axios from "axios";
 import TriviaCard from "../components/TriviaCard.vue";
-import { useStore, ActionTypes, store } from "../store";
-import { useRouter } from "vue-router";
+import { useStore, ActionTypes } from "../store";
+import { useRouter } from "../router";
 
 export default defineComponent({
   name: "home",
@@ -20,23 +23,14 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const state = reactive({
-      triviaList: Array,
+      triviaList: Array
     });
     const jwt = computed(() => {
-      return store.getters.getToken();
+      return store.getters.getToken;
     });
-
     onMounted(() => {
-      //   axios
-      //     .get("api/trivias/", {
-      //       headers: {
-      //         Authorization: `JWT ${jwt}`,
-      //       },
-      //     })
-      //     .then((req) => {
-      //       state.triviaList = req.data;
-      //     });
       axios.get("api/trivias/").then((req) => {
         state.triviaList = req.data;
       });
@@ -46,4 +40,8 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped></style>
+<style scoped>
+.post{
+  float: right;
+}
+</style>
