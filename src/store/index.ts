@@ -58,7 +58,7 @@ export type Getters = {
 }
 
 export const getters: GetterTree<State, State> & Getters = {
-  getToken: (state) => {
+  getToken: state => {
     return state.jwt
   }
 }

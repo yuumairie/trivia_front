@@ -1,7 +1,7 @@
 <template>
   <div class="trivia">
     <div class="header">
-      <div class="user">{{ trivia.user.username }}</div>
+      <div class="user">{{ trivia.id }}</div>
       <div class="genre">
         <div>{{ trivia.genre.name }}</div>
         <div>{{ trivia.created_at }}</div>
@@ -22,11 +22,11 @@ export default defineComponent({
     },
   },
   setup() {
-    function click(){
-      return
+    function click() {
+      return;
     }
-    return {click}
-  }
+    return { click };
+  },
 });
 </script>
 
@@ -34,10 +34,11 @@ export default defineComponent({
 <style scoped>
 .trivia {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
-  border:solid black 1px;
+  border: solid black 1px;
   margin: 10px;
-  width:31.7%;
-  float:left;
+  width: 28%;
+  float: left;
+  margin: 10px 30px 0px 30px;
 }
 .header {
   border-bottom: solid rgba(0, 0, 0, 0.16) 1pt;
@@ -46,7 +47,7 @@ export default defineComponent({
 }
 .trivia .user {
   float: left;
-  font-size:25px;
+  font-size: 25px;
 }
 .trivia .genre {
   float: right;
@@ -61,6 +62,6 @@ export default defineComponent({
   font-weight: bold;
   font-size: 25px;
   padding: 10px;
-  cursor: pointer
+  cursor: pointer;
 }
 </style>
