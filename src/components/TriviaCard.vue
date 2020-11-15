@@ -30,7 +30,6 @@ export default defineComponent({
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .trivia {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
@@ -39,6 +38,7 @@ export default defineComponent({
   width: 28%;
   float: left;
   margin: 10px 30px 0px 30px;
+  border-radius: 0 0 25px 25px;
 }
 .header {
   border-bottom: solid rgba(0, 0, 0, 0.16) 1pt;
@@ -63,5 +63,6 @@ export default defineComponent({
   font-size: 25px;
   padding: 10px;
   cursor: pointer;
+  overflow: hidden;
 }
 </style>

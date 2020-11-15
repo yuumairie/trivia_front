@@ -1,19 +1,35 @@
 <template>
   <div class="register-page">
-    <div class="name">
-      <label for="name">ユーザ名</label>
-      <input type="text" id="name" v-model="state.name" />
-    </div>
-    <div class="email">
-      <label for="address">アドレス</label>
-      <input type="email" id="address" v-model="state.email" />
-    </div>
-    <div class="password">
-      <label for="password">パスワード</label>
-      <input type="password" id="password" v-model="state.password" />
-    </div>
-    <div>
-      <button @click="create()">アカウント作成</button>
+    <label
+      style="font-size:24px;background: linear-gradient(transparent 50%, #a8eaff 50%);"
+    >
+      アカウント情報を入力
+    </label>
+    <br />
+    <br />
+    <div class="info">
+      <div class="name">
+        <label for="name">ユーザ名</label>
+        <br />
+        <input type="text" id="name" v-model="state.name" />
+      </div>
+      <br />
+      <div class="email">
+        <label for="address">アドレス</label>
+        <br />
+        <input type="email" id="address" v-model="state.email" />
+      </div>
+      <br />
+      <div class="password">
+        <label for="password">パスワード</label>
+        <br />
+        <input type="password" id="password" v-model="state.password" />
+      </div>
+      <br />
+      <div>
+        <button @click="create()">アカウント作成</button>
+      </div>
+      <br />
     </div>
   </div>
 </template>
@@ -53,4 +69,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.register-page .info {
+  border: black 2px dashed;
+  width: 64%;
+  margin: auto;
+  height: 100;
+}
+</style>

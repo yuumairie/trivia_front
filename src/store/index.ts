@@ -13,18 +13,24 @@ const state: State = {
 }
 
 export enum MutationTypes {
-  LOGIN = "LOGIN"
+  LOGIN = "LOGIN",
+  REFRESH = "REFRESH"
 }
 export enum ActionTypes {
-  LOGIN = "LOGIN"
+  LOGIN = "LOGIN",
+  REFRESH = "REFRESH"
 }
 
 export type Mutations<S = State> = {
   [MutationTypes.LOGIN](state: S, payload: string): void;
+  [MutationTypes.REFRESH](state: S, payload: string): void;
 }
 
 const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.LOGIN](state: State, payload: string) {
+    state.jwt = payload
+  },
+  [MutationTypes.REFRESH](state: State, payload: string) {
     state.jwt = payload
   }
 }
@@ -44,25 +50,51 @@ export interface Actions {
       password: string;
     }
   ): void;
+  [ActionTypes.REFRESH](
+    { commit }: AugmentedActionContext,
+    payload: {
+      email: string;
+      password: string;
+    }
+  ): void;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
-  [ActionTypes.LOGIN]({ commit },data) {
-    axios.post("authen/jwt/create", data).then((res) => {
-      commit(MutationTypes.LOGIN,res.data.access)
-    });
-  }
+  [ActionTypes.LOGIN]({ commit, dispatch }, data) {
+    return new Promise((resolve, reject) => {
+      axios.post("authen/jwt/create", data).then((res) => {
+        commit(MutationTypes.LOGIN, res.data.access)
+        setTimeout(() => {
+          dispatch(ActionTypes.REFRESH, {
+            refresh: res.data.refresh
+          })
+        }, 3600000)
+        resolve()
+      }).catch((err) => {
+        reject(err)
+      })
+    })
+  },
+  [ActionTypes.REFRESH]({ commit, dispatch }, data) {
+    axios.post("authen/jwt/refresh", data).then((res) => {
+      commit(MutationTypes.LOGIN, res.data.access);
+      setTimeout(() => {
+        dispatch(ActionTypes.REFRESH, {
+          refresh: res.data.refresh
+        })
+      }, 3600000)
+    })
+  },
 }
+
 export type Getters = {
   getToken(state: State): string;
 }
-
 export const getters: GetterTree<State, State> & Getters = {
   getToken: state => {
     return state.jwt
   }
 }
-
 export type Store = Omit<
   VuexStore<State>,
   "commit" | "getters" | "dispatch"
