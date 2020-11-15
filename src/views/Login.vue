@@ -1,15 +1,31 @@
 <template>
   <div class="register-page">
-    <div class="email">
-      <label for="address">アドレス</label>
-      <input type="email" id="address" v-model="state.email" />
-    </div>
-    <div class="password">
-      <label for="password">パスワード</label>
-      <input type="password" id="password" v-model="state.password" />
-    </div>
-    <div>
-      <button @click="login()">ログイン</button>
+    <label
+      style="font-size:24px;background: linear-gradient(transparent 50%, #a8eaff 50%);"
+    >
+      アカウント情報を入力
+    </label>
+    <br /><br />
+    <div class="info">
+      <div class="email">
+        <label for="address">アドレス</label>
+        <br />
+        <input type="email" id="address" v-model="state.email" />
+      </div>
+      <br />
+      <div class="password">
+        <label for="password">パスワード</label>
+        <br />
+        <input type="password" id="password" v-model="state.password" />
+      </div>
+      <br />
+      <div>
+        <button @click="login()">ログイン</button>
+      </div>
+      <br />
+      <div class="message" v-if="state.message">
+        {{ state.message }}
+      </div>
     </div>
   </div>
 </template>
@@ -25,6 +41,7 @@ export default defineComponent({
       name: "",
       email: "",
       password: "",
+      message: "",
     });
 
     //ログイン
@@ -37,10 +54,15 @@ export default defineComponent({
       };
 
       //jwt取得
-      store.dispatch(ActionTypes.LOGIN, data).then(() => {
-        //ホーム画面へ移動
-        router.push("home");
-      });
+      store
+        .dispatch(ActionTypes.LOGIN, data)
+        .then(() => {
+          //ホーム画面へ移動
+          router.push("home");
+        })
+        .catch(() => {
+          state.message = "メールアドレスかパスワードが違います。";
+        });
     }
     return { state, login };
   },

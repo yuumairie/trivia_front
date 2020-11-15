@@ -3,6 +3,8 @@ import Home from '../views/Home.vue'
 import RegisterUser from '../views/RegisterUser.vue'
 import Login from '../views/Login.vue'
 import Post from '../views/Post.vue'
+import {useStore} from '../store'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/home',
@@ -22,7 +24,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/post',
     name: 'Post',
-    component: Post
+    component: Post,
+    beforeEnter:((to,from,next)=>{
+      if(useStore().getters.getToken){
+        next()
+      }else{
+        next('login')
+      }
+    })
   }
 ]
 
