@@ -41,7 +41,7 @@ export default defineComponent({
   setup() {
     function goToHome() {
       const router = useRouter();
-      router.push("home");
+      router.push("/home");
     }
     return { goToHome };
   },

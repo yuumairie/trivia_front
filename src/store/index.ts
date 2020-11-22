@@ -5,34 +5,43 @@ export type State = {
   name: string;
   email: string;
   jwt: string;
+  userId: number;
 }
 const state: State = {
   name: "",
   email: "",
-  jwt: ""
+  jwt: "",
+  userId: 0
+}
+type UserInfo = {
+  name: string;
+  email: string;
+  userId: string;
 }
 
 export enum MutationTypes {
   LOGIN = "LOGIN",
-  REFRESH = "REFRESH"
 }
 export enum ActionTypes {
   LOGIN = "LOGIN",
-  REFRESH = "REFRESH"
 }
 
 export type Mutations<S = State> = {
   [MutationTypes.LOGIN](state: S, payload: string): void;
-  [MutationTypes.REFRESH](state: S, payload: string): void;
 }
 
 const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.LOGIN](state: State, payload: string) {
-    state.jwt = payload
+    state.jwt = payload;
+    axios.get("api/myprofile/", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${payload}`
+      }
+    }).then((res)=>{
+      state.userId = res.data[0].userProfile
+    })
   },
-  [MutationTypes.REFRESH](state: State, payload: string) {
-    state.jwt = payload
-  }
 }
 
 type AugmentedActionContext = {
@@ -50,51 +59,34 @@ export interface Actions {
       password: string;
     }
   ): void;
-  [ActionTypes.REFRESH](
-    { commit }: AugmentedActionContext,
-    payload: {
-      email: string;
-      password: string;
-    }
-  ): void;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
-  [ActionTypes.LOGIN]({ commit, dispatch }, data) {
+  [ActionTypes.LOGIN]({ commit }, data) {
     return new Promise((resolve, reject) => {
       axios.post("authen/jwt/create", data).then((res) => {
         commit(MutationTypes.LOGIN, res.data.access)
-        setTimeout(() => {
-          dispatch(ActionTypes.REFRESH, {
-            refresh: res.data.refresh
-          })
-        }, 3600000)
         resolve()
       }).catch((err) => {
         reject(err)
       })
     })
   },
-  [ActionTypes.REFRESH]({ commit, dispatch }, data) {
-    axios.post("authen/jwt/refresh", data).then((res) => {
-      commit(MutationTypes.LOGIN, res.data.access);
-      setTimeout(() => {
-        dispatch(ActionTypes.REFRESH, {
-          refresh: res.data.refresh
-        })
-      }, 3600000)
-    })
-  },
 }
-
 export type Getters = {
   getToken(state: State): string;
+  getUserId(state: State): number;
 }
+
 export const getters: GetterTree<State, State> & Getters = {
   getToken: state => {
     return state.jwt
+  },
+  getUserId: state => {
+    return state.userId
   }
 }
+
 export type Store = Omit<
   VuexStore<State>,
   "commit" | "getters" | "dispatch"
