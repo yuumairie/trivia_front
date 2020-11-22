@@ -54,6 +54,7 @@ export default defineComponent({
       const data = {
         email: state.email,
         password: state.password,
+        username: state.name
       };
       //アカウント作成
       axios.post("/api/register/", data).then(() => {

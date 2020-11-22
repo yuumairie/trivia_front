@@ -3,7 +3,9 @@ import Home from '../views/Home.vue'
 import RegisterUser from '../views/RegisterUser.vue'
 import Login from '../views/Login.vue'
 import Post from '../views/Post.vue'
-import {useStore} from '../store'
+import Detail from '../views/Detail.vue'
+import Edit from '../views/Edit.vue'
+import { useStore } from '../store'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,14 +27,32 @@ const routes: Array<RouteRecordRaw> = [
     path: '/post',
     name: 'Post',
     component: Post,
-    beforeEnter:((to,from,next)=>{
-      if(useStore().getters.getToken){
+    beforeEnter: ((to, from, next) => {
+      if (useStore().getters.getToken) {
         next()
-      }else{
+      } else {
+        next('login')
+      }
+    })
+  },
+  {
+    path: '/detail/:id',
+    name: 'Detail',
+    component: Detail
+  },
+  {
+    path: '/edit/:id',
+    name: 'Edit',
+    component: Edit,
+    beforeEnter: ((to, from, next) => {
+      if (useStore().getters.getToken) {
+        next()
+      } else {
         next('login')
       }
     })
   }
+
 ]
 
 export const router = createRouter({

@@ -7,12 +7,13 @@
         <div>{{ trivia.created_at }}</div>
       </div>
     </div>
-    <div class="content" @click="click()">{{ trivia.content }}</div>
+    <div class="content" @click="click(trivia.id)">{{ trivia.content }}</div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useRouter } from "../router";
 
 export default defineComponent({
   name: "TrivaiCard",
@@ -21,9 +22,10 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup() {
-    function click() {
-      return;
+  setup(props) {
+    const router = useRouter();
+    function click(id: number) {
+      router.push(`/detail/${id}`);
     }
     return { click };
   },

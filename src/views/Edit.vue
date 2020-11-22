@@ -1,5 +1,5 @@
 <template>
-  <div class="post-page">
+  <div class="edit-page">
     <div class="trivia-genre">
       <label for="genre">ジャンル</label>
       <select id="genre" v-model="state.genreId">
@@ -13,21 +13,25 @@
     </div>
     <div class="trivia-content">
       <label for="content">内容</label>
-      <textarea id="content" v-model="state.triviaContent"></textarea>
+      <textarea
+        id="content"
+        v-model="state.triviaContent"
+        disabled="true"
+      ></textarea>
     </div>
     <div class="trivia-content">
       <label for="explanation">説明</label>
       <textarea id="explanation" v-model="state.triviaExplanation"></textarea>
     </div>
     <div>
-      <button @click="post()">投函</button>
+      <button @click="update()">更新</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, computed, onMounted } from "vue";
-import { useStore, ActionTypes } from "../store";
+import { useStore } from "../store";
 import { useRouter } from "../router";
 import axios from "axios";
 export default defineComponent({
@@ -38,7 +42,7 @@ export default defineComponent({
       genreList: [],
       genreId: "",
       triviaContent: "",
-      triviaExplanation:""
+      triviaExplanation: "",
     });
 
     //JWT
@@ -49,13 +53,19 @@ export default defineComponent({
       axios.get("api/genres/").then((req) => {
         state.genreList = req.data;
       });
+      axios
+        .get(`api/trivias/${router.currentRoute.value.params.id}/`)
+        .then((req) => {
+          state.genreId = req.data.genre;
+          state.triviaContent = req.data.content;
+          state.triviaExplanation = req.data.explanation;
+        });
     });
-    //投稿関数
-    function post() {
+    //更新関数
+    function update() {
       const data = {
         genre: state.genreId,
-        content: state.triviaContent,
-        explanation: state.triviaExplanation
+        explanation: state.triviaExplanation,
       };
       const headers = {
         "Content-Type": "application/json",
@@ -63,14 +73,14 @@ export default defineComponent({
       };
 
       axios
-        .post("api/trivias/", data, {
-          "headers" : headers
+        .patch(`api/trivias/${router.currentRoute.value.params.id}/`, data, {
+          headers: headers,
         })
-        .then((req) => {
-          console.log(req);
+        .then(() => {
+          router.push(`/detail/${router.currentRoute.value.params.id}`);
         });
     }
-    return { state, post };
+    return { state, update ,jwt};
   },
 });
 </script>

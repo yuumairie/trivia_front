@@ -57,6 +57,7 @@ export default defineComponent({
       store
         .dispatch(ActionTypes.LOGIN, data)
         .then(() => {
+          store.dispatch(ActionTypes.LOGIN, data);
           //ホーム画面へ移動
           router.push("home");
         })
