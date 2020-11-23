@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, onMounted } from "vue";
-import { useStore, ActionTypes } from "../store";
+import { useStore } from "../store";
 import { useRouter } from "../router";
 import axios from "axios";
 export default defineComponent({
@@ -38,7 +38,7 @@ export default defineComponent({
       genreList: [],
       genreId: "",
       triviaContent: "",
-      triviaExplanation:""
+      triviaExplanation: "",
     });
 
     //JWT
@@ -55,7 +55,7 @@ export default defineComponent({
       const data = {
         genre: state.genreId,
         content: state.triviaContent,
-        explanation: state.triviaExplanation
+        explanation: state.triviaExplanation,
       };
       const headers = {
         "Content-Type": "application/json",
@@ -64,10 +64,10 @@ export default defineComponent({
 
       axios
         .post("api/trivias/", data, {
-          "headers" : headers
+          headers: headers,
         })
         .then((req) => {
-          console.log(req);
+          router.push(`/detail/${req.data.id}`);
         });
     }
     return { state, post };
@@ -75,4 +75,9 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.post-page {
+  position: relative;
+  top: 100px;
+}
+</style>
