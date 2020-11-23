@@ -1,5 +1,5 @@
 <template>
-  <div id="nav">
+  <header id="nav">
     <h1 class="nav-bar" @click="goToHome()">
       <img
         style="height:20px"
@@ -29,8 +29,7 @@
         </div></router-link
       >
     </div>
-  </div>
-  <hr />
+  </header>
   <router-view />
 </template>
 <script lang="ts">
@@ -56,11 +55,16 @@ export default defineComponent({
   color: #2c3e50;
 }
 #app #nav {
+  position: fixed;
   background-color: white;
   color: black;
   text-align: left;
   height: 90px;
-  background-image: url("../src/assets/images/brain-2029391_1280.png");
+  background-image: url(/img/brain-2029391_1280.a72ef293.png);
+  width: 100%;
+  margin: 0;
+  top: 0;
+  border-bottom: black 2px solid;
 }
 #nav .btn {
   background-color: white;
