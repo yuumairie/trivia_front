@@ -56,7 +56,7 @@ export default defineComponent({
       axios
         .get(`api/trivias/${router.currentRoute.value.params.id}/`)
         .then((req) => {
-          state.genreId = req.data.genre;
+          state.genreId = req.data.genre.id;
           state.triviaContent = req.data.content;
           state.triviaExplanation = req.data.explanation;
         });
@@ -85,4 +85,9 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.edit-page {
+  position: relative;
+  top: 100px;
+}
+</style>

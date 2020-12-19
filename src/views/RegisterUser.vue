@@ -8,19 +8,19 @@
     <br />
     <br />
     <div class="info">
-      <div class="name">
+      <div>
         <label for="name">ユーザ名</label>
         <br />
         <input type="text" id="name" v-model="state.name" />
       </div>
       <br />
-      <div class="email">
+      <div>
         <label for="address">アドレス</label>
         <br />
         <input type="email" id="address" v-model="state.email" />
       </div>
       <br />
-      <div class="password">
+      <div>
         <label for="password">パスワード</label>
         <br />
         <input type="password" id="password" v-model="state.password" />
@@ -75,6 +75,14 @@ export default defineComponent({
   border: black 2px dashed;
   width: 64%;
   margin: auto;
-  height: 100;
+}
+.register-page {
+  position: relative;
+  top: 100px;
+  text-align: center;
+}
+input {
+  height: 1.5em;
+  width: 17em;
 }
 </style>
