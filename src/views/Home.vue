@@ -3,7 +3,7 @@
     <div class="post" v-if="jwt">
       <router-link to="/post">投稿</router-link>
     </div>
-    <div>
+    <div class="search">
       <select id="genre" v-model="state.genreId">
         <option
           v-for="genre in state.genreList"
@@ -14,14 +14,18 @@
       </select>
       <img
         class="glasses"
-        :src="require('@/assets/images/虫眼鏡.jpeg')"
+        :src="require('@/assets/images/虫眼鏡.png')"
         alt="検索"
         @click="search()"
       />
     </div>
     <div class="cards">
       <div v-for="trivia in triviaOnSearch" :key="trivia">
-        <Trivia-Card :trivia="trivia" />
+        <Trivia-Card
+          :trivia="trivia"
+          :isNotLoginUser="isNotLoginUser(trivia.userPost.id)"
+          @get-trivia-list="getTriviaList"
+        />
       </div>
     </div>
   </div>
@@ -41,12 +45,11 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const router = useRouter();
     const state = reactive({
       triviaList: [],
       genreList: [],
-      genre: "",
-      genreId: "",
+      genre: 0,
+      genreId: 0,
     });
     const jwt = computed(() => {
       return store.getters.getToken;
@@ -54,24 +57,35 @@ export default defineComponent({
     const triviaOnSearch = computed(() => {
       if (state.genre) {
         return state.triviaList.filter((trivia: TriviaModel) => {
-          return trivia.genre === state.genre;
+          return trivia.genre.id === state.genre;
         });
       }
       return state.triviaList;
     });
-    onMounted(() => {
+
+    function getTriviaList(): void {
       axios.get("api/trivias/").then((req) => {
         state.triviaList = req.data;
       });
+    }
+
+    onMounted(() => {
+      getTriviaList();
       axios.get("api/genres/").then((req) => {
         state.genreList = req.data;
       });
     });
-    function search() {
+    function search(): void {
       state.genre = state.genreId;
     }
+    function isNotLoginUser(id: number): boolean {
+      if (jwt.value) {
+        return store.getters.getUserId !== id;
+      }
+      return false;
+    }
 
-    return { state, jwt, search, triviaOnSearch };
+    return { state, jwt, search, triviaOnSearch, isNotLoginUser ,getTriviaList};
   },
 });
 </script>
@@ -87,5 +101,13 @@ export default defineComponent({
   width: 20px;
   margin-left: 18px;
   cursor: pointer;
+}
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.search {
+  text-align: center;
 }
 </style>

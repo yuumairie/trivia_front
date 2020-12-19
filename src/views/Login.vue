@@ -1,9 +1,9 @@
 <template>
-  <div class="register-page">
+  <div class="login-page">
     <label
       style="font-size:24px;background: linear-gradient(transparent 50%, #a8eaff 50%);"
     >
-      アカウント情報を入力
+      ログイン
     </label>
     <br /><br />
     <div class="info">
@@ -56,8 +56,9 @@ export default defineComponent({
       //jwt取得
       store
         .dispatch(ActionTypes.LOGIN, data)
-        .then(() => {
-          store.dispatch(ActionTypes.LOGIN, data);
+        .then((resp) => {
+          //ユーザのいいね一覧取得
+          store.dispatch(ActionTypes.GOOD)
           //ホーム画面へ移動
           router.push("home");
         })
@@ -70,4 +71,19 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.login-page {
+  position: relative;
+  top: 100px;
+  text-align: center;
+}
+input {
+  height: 1.5em;
+  width: 17em;
+}
+.info {
+  border: black 2px dashed;
+  width: 64%;
+  margin:auto;
+}
+</style>

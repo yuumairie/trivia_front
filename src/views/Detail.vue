@@ -4,17 +4,22 @@
     <div class="explanation">
       {{ state.trivia.explanation ? state.trivia.explanation : "説明なし" }}
     </div>
-    <div class="edit" v-if="state.trivia.userPost === userId" @click="edit()">
-      <img :src="require('@/assets/images/edit.jpeg')" alt="編集" />
+    <div
+      class="edit"
+      v-if="state.trivia.userPost.id === userId"
+      @click="edit()"
+    >
+      <img :src="require('@/assets/images/edit.png')" alt="編集" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, computed } from "vue";
+import { defineComponent, onMounted, reactive, computed, PropType } from "vue";
 import axios from "axios";
 import { useStore } from "../store";
 import { useRouter } from "../router";
+import { TriviaModel } from "../types/task";
 
 export default defineComponent({
   name: "detail",
@@ -23,7 +28,21 @@ export default defineComponent({
     const router = useRouter();
 
     const state = reactive({
-      trivia: Object,
+      trivia: {
+        id: Number,
+        userPost: {
+          id: Number,
+          username: Number,
+        },
+        genre: {
+          id: Number,
+          name: String,
+        },
+        content: String,
+        createdAt: String,
+        explanation: String,
+        goodCount: Number,
+      },
     });
     const jwt = computed(() => {
       return store.getters.getToken;
@@ -48,6 +67,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.detail-page {
+  position: relative;
+  top: 100px;
+  text-align: center;
+}
 .detail-page .explanation {
   border: black 2px dashed;
   width: 64%;
